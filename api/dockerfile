@@ -1,0 +1,23 @@
+# Use Node 18 Alpine
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Optional: install bash for debugging
+RUN apk add --no-cache bash
+
+# Copy package.json first for Docker caching
+COPY package*.json ./
+
+# Install ALL dependencies (dev + prod)
+RUN npm install
+
+# Copy the rest of the application
+COPY . .
+
+# Expose NestJS port
+EXPOSE 3000
+
+# Run NestJS in dev mode using npx
+CMD ["npm", "run", "start:dev"]
